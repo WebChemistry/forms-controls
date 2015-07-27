@@ -1,0 +1,9 @@
+{
+  "name": "webchemistry/forms-controls",
+  "type": "library",
+  "description": "Components for nette forms",
+  "keywords": ["nette", "webchemistry", "forms", "components"],
+  "autoload": {
+    "classmap": ["src/"]
+  }
+}
