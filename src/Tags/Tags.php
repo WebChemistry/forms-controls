@@ -97,6 +97,7 @@ class Tags extends TextInput {
 	public function getControl() {
 		$control = parent::getControl();
 
+		$control->value = implode(',', (array) $this->getValue());
 		$control->class[] = 'tag-input';
 
 		return $control;

@@ -35,4 +35,18 @@ class TagsTest extends \PHPUnit_Framework_TestCase {
 			2 => 'third'
 		), $tags->getValue());
 	}
+
+	public function testRender() {
+		$form = new Form;
+
+		$tags = $form->addTags('tags')
+					 ->setDefaultValue(NULL);
+
+		$this->assertStringEqualsFile(E::dumpedFile('tagsNull'), $tags->getControl());
+
+		$tags = $form->addTags('tagsTwo')
+					 ->setDefaultValue(array('tag', 'one', 'two'));
+
+		$this->assertStringEqualsFile(E::dumpedFile('tagsRender'), $tags->getControl());
+	}
 }
