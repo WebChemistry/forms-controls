@@ -4,7 +4,7 @@ namespace WebChemistry\Forms\Controls;
 
 use Nette;
 
-class Mask extends Nette\Forms\Controls\TextInput{
+class Mask extends TextInput {
 
 	/** @var array */
 	protected $settings = array();

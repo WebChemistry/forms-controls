@@ -3,7 +3,6 @@
 namespace WebChemistry\Forms\Controls;
 
 use Nette\Application\IPresenter;
-use Nette\Forms\Controls\TextInput;
 
 class Tags extends TextInput {
 

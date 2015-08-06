@@ -2,7 +2,6 @@
 
 namespace WebChemistry\Forms\Controls;
 
-use Nette\Forms\Controls\TextArea;
 use Nette\Http\Url;
 use WebChemistry\Forms\Exception;
 
