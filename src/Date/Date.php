@@ -146,7 +146,8 @@ class Date extends Nette\Forms\Controls\BaseControl {
 		$date = $this->value ? $this->value: new \DateTime;
 		$html = Html::el();
 
-		$input = Html::el('input')->name($controlName . '[js]')->id($this->getHtmlId());
+		$input = parent::getControl();
+		$input->attrs['name'] .= '[js]';
 		$input->class[] = 'js';
 		$input->class[] = 'date-input';
 		$input->data('format', $this->getJsFormat());
