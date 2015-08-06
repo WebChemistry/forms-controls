@@ -29,7 +29,8 @@ class MaskTest extends \PHPUnit_Framework_TestCase {
 		$mask->getControl();
 
 		$rules = $mask->getRules()->getIterator();
-		$this->assertSame('[0-9][0-9][0-9] [0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z] [a-zA-Z][a-zA-Z][a-zA-Z]', $rules[0]->arg);
+		$branch = $rules[0]->branch->getIterator();
+		$this->assertSame('[0-9][0-9][0-9] [0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z] [a-zA-Z][a-zA-Z][a-zA-Z]', $branch[0]->arg);
 
 		A::throws(function () use ($mask) {
 			$mask->setMask('999');
@@ -49,7 +50,8 @@ class MaskTest extends \PHPUnit_Framework_TestCase {
 		$mask->getControl();
 
 		$rules = $mask->getRules()->getIterator();
-		$this->assertSame('[a-z]{5}[0-9]?(a|b)+', $rules[0]->arg);
+		$branch = $rules[0]->branch->getIterator();
+		$this->assertSame('[a-z]{5}[0-9]?(a|b)+', $branch[0]->arg);
 	}
 
 	public function testSubmitInvalid() {
@@ -96,5 +98,35 @@ class MaskTest extends \PHPUnit_Framework_TestCase {
 			'mask' => '124 asd',
 			'regex' => '235 wes'
 		), $form->getValues(TRUE));
+	}
+
+	public function testNotRequired() {
+		$presenter = $this->presenterFactory->createPresenter('Mask');
+		$presenter->autoCanonicalize = FALSE;
+
+		$presenter->run(new \Nette\Application\Request('Mask', 'POST', array(
+			'do' => 'form-submit'
+		)));
+
+		/** @var \Form $form */
+		$form = $presenter['form'];
+
+		$this->assertTrue($form->isSubmitted());
+		$this->assertFalse($form->hasErrors());
+	}
+
+	public function testRequired() {
+		$presenter = $this->presenterFactory->createPresenter('Mask');
+		$presenter->autoCanonicalize = FALSE;
+
+		$presenter->run(new \Nette\Application\Request('Mask', 'POST', array(
+			'do' => 'required-submit'
+		)));
+
+		/** @var \Form $form */
+		$form = $presenter['required'];
+
+		$this->assertTrue($form->isSubmitted());
+		$this->assertTrue($form->hasErrors());
 	}
 }

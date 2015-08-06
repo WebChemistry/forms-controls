@@ -47,7 +47,9 @@ class Mask extends Nette\Forms\Controls\TextInput{
 				$message = $this->getTranslator()->translate($message);
 			}
 
-			$this->addRule(Nette\Forms\Form::PATTERN, $message, $this->regex);
+			$this->addCondition(Nette\Forms\Form::FILLED)
+				 ->addRule(Nette\Forms\Form::PATTERN, $message, $this->regex);
+
 			$this->isSetRule = TRUE;
 		}
 	}

@@ -22,4 +22,18 @@ class MaskPresenter extends Presenter {
 
 		return $form;
 	}
+
+	protected function createComponentRequired() {
+		$form = new \Form;
+
+		$form->addMask('mask')
+			 ->setRequired()
+			 ->setMask('999 aaa');
+
+		$form->addMask('regex')
+			 ->setRequired()
+			 ->setRegex('[0-9]{3} [a-z]{3}');
+
+		return $form;
+	}
 }
