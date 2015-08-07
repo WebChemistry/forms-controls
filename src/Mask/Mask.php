@@ -16,7 +16,10 @@ class Mask extends TextInput {
 	protected $regex;
 
 	/** @var string */
-	protected $message;
+	protected $errorMessage;
+
+	/** @var string */
+	public static $message = 'Please enter a value in the required format.';
 
 	/**
 	 * @param  string $label  label
@@ -41,7 +44,7 @@ class Mask extends TextInput {
 
 	private function createRule() {
 		if (!$this->isSetRule) {
-			$message = $this->message;
+			$message = $this->errorMessage;
 
 			if ($this->getTranslator()) {
 				$message = $this->getTranslator()->translate($message);
@@ -66,7 +69,7 @@ class Mask extends TextInput {
 
 		$this->settings['regex'] = $this->regex = $regex;
 
-		$this->message = $message ? : 'Please enter a value in the required format.';
+		$this->errorMessage = $message ? : self::$message;
 
 		return $this;
 	}
@@ -86,7 +89,7 @@ class Mask extends TextInput {
 		$this->settings['mask'] = $mask;
 
 		$this->regex = str_replace(array('9', 'a', '\*'), array('[0-9]', '[a-zA-Z]', '[0-9a-zA-Z]'), preg_quote($mask));
-		$this->message = $message ? : 'Please enter a value in the required format.';
+		$this->errorMessage = $message ? : self::$message;
 
 		return $this;
 	}

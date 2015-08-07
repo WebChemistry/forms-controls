@@ -13,6 +13,12 @@ class Recaptcha extends TextArea {
 	/** @var string */
 	private $secretKey;
 
+	/** @var array */
+	public static $messages = array(
+		'filled' => 'Please fill antispam.',
+		'error' => 'Antispam detection wasn\'t success.'
+	);
+
 	/**
 	 * @param string $apiKey
 	 * @param string $secretKey
@@ -33,7 +39,7 @@ class Recaptcha extends TextArea {
 		$httpData = $this->getForm()->getHttpData();
 
 		if (!isset($httpData['g-recaptcha-response'])) {
-			$this->addError('Please fill antispam.');
+			$this->addError(self::$messages['filled']);
 
 			return TRUE;
 		}
@@ -50,7 +56,7 @@ class Recaptcha extends TextArea {
 		if (isset($data->success) && $data->success === TRUE) {
 			return TRUE;
 		} else {
-			$this->addError('Antispam detection wasn\'t success.');
+			$this->addError(self::$messages['error']);
 
 			return TRUE;
 		}
