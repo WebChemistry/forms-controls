@@ -91,8 +91,6 @@ class Date extends Nette\Forms\Controls\TextInput {
 	public function getControl() {
 		$control = parent::getControl();
 
-		$this->liveControl($control);
-
 		$control->class[] = 'js';
 		$control->class[] = 'date-input';
 		$control->data('format', $this->format);
