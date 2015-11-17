@@ -10,7 +10,7 @@ trait TPresenter {
 	 * @param string $value
 	 * @param string $path
 	 */
-	public function handleLiveValidation($value, $path) {
+	public function actionLiveValidation($value, $path) {
 		if ($path === NULL) {
 			$this->error('Path parameter is missing.');
 		}
