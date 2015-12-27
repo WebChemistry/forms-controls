@@ -114,11 +114,11 @@ class Date extends Nette\Forms\Controls\TextInput {
 	}
 
 	/**
-	 * @return \DateTime|null|bool
+	 * @return \DateTime|bool
 	 */
 	protected function checkDate() {
-		if ($this->rawValue === '') {
-			return null;
+		if (!$this->isRequired() && !$this->rawValue) {
+			return NULL;
 		}
 
 		$date = \DateTime::createFromFormat($this->format, $this->rawValue);
