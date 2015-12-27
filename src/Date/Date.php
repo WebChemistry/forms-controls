@@ -9,9 +9,7 @@ class Date extends Nette\Forms\Controls\TextInput {
 
 	const TIMESTAMP = 'timestamp';
 	const DATETIME = 'datetime';
-
-	/** @var string */
-	public static $message = 'Date is not in expected format (example of correct date: %s).';
+	const VALID = ':wchDate';
 
 	/** @var array */
 	protected $settings = array();
@@ -124,7 +122,8 @@ class Date extends Nette\Forms\Controls\TextInput {
 		$date = \DateTime::createFromFormat($this->format, $this->rawValue);
 
 		if (!$date || $date->format($this->format) !== $this->rawValue) {
-			$this->addError(sprintf(self::$message, date($this->format, time())));
+			$message = isset(Nette\Forms\Validator::$messages[self::VALID]) ? Nette\Forms\Validator::$messages[self::VALID] : 'Date is not in expected format (example of correct date: %s).';
+			$this->addError(sprintf($message, date($this->format, time())));
 
 			return FALSE;
 		}
