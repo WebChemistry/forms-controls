@@ -3,11 +3,14 @@
 namespace WebChemistry\Forms\Controls;
 
 use Nette\Application\IPresenter;
+use Nette\Forms\Validator;
 
 class Tags extends TextInput {
 
 	/** @var bool */
 	private $usePlaceholder = TRUE;
+
+	const VALID = ':wchTags';
 
 	/**
 	 * @param string $label
@@ -50,7 +53,7 @@ class Tags extends TextInput {
 			return;
 		}
 
-		$message = 'For the distribution of words please use comma.';
+		$message = isset(Validator::$messages[self::VALID]) ? Validator::$messages[self::VALID] : 'For the distribution of words please use comma.';
 
 		if ($this->getTranslator()) {
 			$message = $this->getTranslator()->translate($message);
