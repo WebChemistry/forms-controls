@@ -246,4 +246,18 @@ trait TForm {
 
 		return $this[$name] = $control;
 	}
+
+	/**
+	 * Adds control that allows the user to upload files.
+	 *
+	 * @param  string  control name
+	 * @param  string  label
+	 * @param  string
+	 * @param  bool    allows to upload multiple files
+	 * @return Controls\Upload
+	 */
+	public function addPreviewUpload($name, $label = NULL, $uploadPath = NULL) {
+		return $this[$name] = new Controls\Upload($label, $uploadPath);
+	}
+
 }
