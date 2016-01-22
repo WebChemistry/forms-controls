@@ -62,3 +62,8 @@ $form->addSuggestion('suggestion', 'Suggestion', function ($query) {
 $form->addTags('tags', 'Tags');
 ```
 
+## Upload control
+
+```php
+$form->addPreviewUpload('upload', 'Upload', 'path/to/upload/dir');
+
