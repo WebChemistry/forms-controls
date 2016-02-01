@@ -54,11 +54,6 @@ class Tags extends TextInput {
 		}
 
 		$message = isset(Validator::$messages[self::VALID]) ? Validator::$messages[self::VALID] : 'For the distribution of words please use comma.';
-
-		if ($this->getTranslator()) {
-			$message = $this->getTranslator()->translate($message);
-		}
-
 		$this->setAttribute('placeholder', $message);
 	}
 
