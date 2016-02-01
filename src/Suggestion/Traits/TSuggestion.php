@@ -12,8 +12,7 @@ trait TSuggestion {
 	 */
 	public function actionSuggestion($path, $term) {
 		$lookup = base64_decode($path);
-		$data = array();
-
+		$data = [];
 		$component = $this;
 
 		foreach (explode('-', $lookup) as $name) {
@@ -32,6 +31,10 @@ trait TSuggestion {
 			}
 		}
 
-		$this->sendJson($data);
+		if ($data instanceof \Traversable) {
+			$data = iterator_to_array($data);
+		}
+
+		$this->sendJson((array) $data);
 	}
 }
