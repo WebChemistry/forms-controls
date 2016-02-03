@@ -12,7 +12,7 @@ class Date extends Nette\Forms\Controls\TextInput {
 	const VALID = ':wchDate';
 
 	/** @var array */
-	protected $settings = array();
+	protected $settings = [];
 
 	/** @var string */
 	protected $type = self::DATETIME;
@@ -115,22 +115,31 @@ class Date extends Nette\Forms\Controls\TextInput {
 	}
 
 	/**
+	 * @return string
+	 */
+	protected function getErrorMessage() {
+		if (isset(Nette\Forms\Validator::$messages[self::VALID])) {
+			return Nette\Forms\Validator::$messages[self::VALID];
+		} else {
+			return 'Date is not in expected format (example of correct date: %s).';
+		}
+	}
+
+	/**
 	 * @return \DateTime|bool
 	 */
 	protected function checkDate() {
 		if (!$this->isRequired() && !$this->rawValue) {
 			return NULL;
 		}
-
 		$date = \DateTime::createFromFormat($this->format, $this->rawValue);
-
 		if (!$date || $date->format($this->format) !== $this->rawValue) {
-			$message = isset(Nette\Forms\Validator::$messages[self::VALID]) ? Nette\Forms\Validator::$messages[self::VALID] : 'Date is not in expected format (example of correct date: %s).';
-			$this->addError(sprintf($message, date($this->format, time())));
+			$this->addError(sprintf($this->getErrorMessage(), date($this->format, time())));
 
 			return FALSE;
 		}
 
 		return $date;
 	}
+
 }

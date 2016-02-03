@@ -37,4 +37,5 @@ trait TSuggestion {
 
 		$this->sendJson((array) $data);
 	}
+
 }

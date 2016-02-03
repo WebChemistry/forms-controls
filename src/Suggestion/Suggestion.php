@@ -3,7 +3,7 @@
 namespace WebChemistry\Forms\Controls;
 
 use Nette;
-use WebChemistry\Forms\Exception;
+use WebChemistry\Forms\ControlException;
 
 class Suggestion extends Nette\Forms\Controls\TextInput {
 
@@ -72,10 +72,11 @@ class Suggestion extends Nette\Forms\Controls\TextInput {
 	/**
 	 * @param $q
 	 * @return array
+	 * @throws ControlException
 	 */
 	public function call($q) {
 		if (!is_callable($this->callback)) {
-			throw new Exception('Suggestion: You must set callable callback.');
+			throw new ControlException('Suggestion: You must set callable callback.');
 		}
 
 		return call_user_func($this->callback, $q);
@@ -98,14 +99,13 @@ class Suggestion extends Nette\Forms\Controls\TextInput {
 			}
 		} else {
 			$url = $this->link;
-
 			$control->data('url', urldecode($url));
 		}
 
 		$control->class[] = 'suggestion-input';
-
 		$control->data('suggestion', $this->settings);
 
 		return $control;
 	}
+
 }

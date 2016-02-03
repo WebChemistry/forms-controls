@@ -55,7 +55,7 @@ class RecaptchaTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertFalse($form->isValid());
 		$this->assertSame(array(
-			0 => 'Antispam detection wasn\'t success.'
+			0 => 'Antispam detection was not successful.'
 		), $form->getErrors());
 	}
 }

@@ -9,6 +9,7 @@ use Nette\Forms\Validator;
 use Nette\Http\FileUpload;
 use Nette\Utils\Random;
 use WebChemistry\Images\Controls\UploadCheckbox;
+use WebChemistry\Forms\ControlException;
 
 class Upload extends UploadControl {
 
@@ -43,7 +44,11 @@ class Upload extends UploadControl {
 	 * @return string
 	 */
 	protected function getFilledMessage() {
-		return isset(Validator::$messages[self::UPLOAD_FILLED]) ? Validator::$messages[self::UPLOAD_FILLED] : 'You must agree with deleting of file.';
+		if (isset(Validator::$messages[self::UPLOAD_FILLED])) {
+			return Validator::$messages[self::UPLOAD_FILLED];
+		} else {
+			return 'You must agree with deleting of file.';
+		}
 	}
 
 	protected function attached($form) {
@@ -118,11 +123,11 @@ class Upload extends UploadControl {
 	/**
 	 * @param string $uploadPath
 	 * @return Upload
-	 * @throws \Exception
+	 * @throws ControlException
 	 */
 	public function setUploadPath($uploadPath) {
 		if (!file_exists($uploadPath) || !is_dir($uploadPath)) {
-			throw new \Exception('Path for uploading not exists.');
+			throw new ControlException('Path for uploading not exists.');
 		}
 		$this->uploadPath = $uploadPath;
 
@@ -148,6 +153,10 @@ class Upload extends UploadControl {
 		return parent::getControl();
 	}
 
+	/**
+	 * @param string $caption
+	 * @return \Nette\Utils\Html|string
+	 */
 	public function getLabel($caption = NULL) {
 		if ($this->checkbox->isOk()) {
 			return $this->isRequired() ? parent::getLabel($caption) : NULL;

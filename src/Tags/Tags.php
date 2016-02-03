@@ -11,7 +11,10 @@ class Tags extends TextInput {
 	/** @var bool */
 	private $usePlaceholder = TRUE;
 
+	/** @deprecated */
 	const VALID = ':wchTags';
+
+	const PLACEHOLDER = ':wchTags';
 
 	/**
 	 * @param string $label
@@ -49,13 +52,22 @@ class Tags extends TextInput {
 		return parent::setAttribute($name, $value);
 	}
 
+	/**
+	 * @return string
+	 */
+	protected function getMessage() {
+		if (isset(Validator::$messages[self::PLACEHOLDER])) {
+			return Validator::$messages[self::PLACEHOLDER];
+		} else {
+			return 'For the distribution of words please use comma.';
+		}
+	}
+
 	private function createPlaceholder() {
 		if ($this->usePlaceholder === FALSE) {
 			return;
 		}
-
-		$message = isset(Validator::$messages[self::VALID]) ? Validator::$messages[self::VALID] : 'For the distribution of words please use comma.';
-		$this->setAttribute('placeholder', $message);
+		$this->setAttribute('placeholder', $this->getMessage());
 	}
 
 	/**
@@ -77,7 +89,6 @@ class Tags extends TextInput {
 	 */
 	public function getValue() {
 		$value = parent::getValue();
-
 		if (!$value) {
 			return NULL;
 		} else if (is_array($value)) {
@@ -103,8 +114,11 @@ class Tags extends TextInput {
 
 	/**
 	 * @param mixed $value
+	 * @return Tags
 	 */
 	public function setValue($value) {
 		$this->rawValue = $this->value = $value;
+
+		return $this;
 	}
 }

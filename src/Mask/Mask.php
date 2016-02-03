@@ -3,11 +3,14 @@
 namespace WebChemistry\Forms\Controls;
 
 use Nette;
+use WebChemistry\Forms\ControlException;
 
 class Mask extends Nette\Forms\Controls\TextInput {
 
+	const VALID = ':wchMask';
+
 	/** @var array */
-	protected $settings = array();
+	protected $settings = [];
 
 	/** @var bool */
 	protected $isSetRule = FALSE;
@@ -17,9 +20,6 @@ class Mask extends Nette\Forms\Controls\TextInput {
 
 	/** @var string */
 	protected $errorMessage;
-
-	/** @var string */
-	public static $message = 'Please enter a value in the required format.';
 
 	/**
 	 * @param  string $label  label
@@ -42,16 +42,23 @@ class Mask extends Nette\Forms\Controls\TextInput {
 		parent::loadHttpData();
 	}
 
+	/**
+	 * @return string
+	 */
+	protected function getErrorMessage() {
+		if ($this->errorMessage) {
+			return $this->errorMessage;
+		} else if (isset(Nette\Forms\Validator::$messages[self::VALID])) {
+			return Nette\Forms\Validator::$messages[self::VALID];
+		} else {
+			return 'Please enter a value in the required format.';
+		}
+	}
+
 	private function createRule() {
 		if (!$this->isSetRule) {
-			$message = $this->errorMessage;
-
-			if ($this->getTranslator()) {
-				$message = $this->getTranslator()->translate($message);
-			}
-
 			$this->addCondition(Nette\Forms\Form::FILLED)
-				 ->addRule(Nette\Forms\Form::PATTERN, $message, $this->regex);
+				 ->addRule(Nette\Forms\Form::PATTERN, $this->getErrorMessage(), $this->regex);
 
 			$this->isSetRule = TRUE;
 		}
@@ -61,15 +68,14 @@ class Mask extends Nette\Forms\Controls\TextInput {
 	 * @param string $regex
 	 * @param string $message
 	 * @return Mask
+	 * @throws ControlException
 	 */
 	public function setRegex($regex, $message = NULL) {
 		if ($this->isSetRule) {
-			throw new \Exception('Rule is already set.');
+			throw new ControlException('Rule is already set.');
 		}
-
 		$this->settings['regex'] = $this->regex = $regex;
-
-		$this->errorMessage = $message ? : self::$message;
+		$this->errorMessage = $message;
 
 		return $this;
 	}
@@ -80,16 +86,16 @@ class Mask extends Nette\Forms\Controls\TextInput {
 	 * @param string $mask
 	 * @param string $message
 	 * @return Mask
+	 * @throws ControlException
 	 */
 	public function setMask($mask, $message = NULL) {
 		if ($this->isSetRule) {
-			throw new \Exception('Rule is already set.');
+			throw new ControlException('Rule is already set.');
 		}
 
 		$this->settings['mask'] = $mask;
-
 		$this->regex = str_replace(array('9', 'a', '\*'), array('[0-9]', '[a-zA-Z]', '[0-9a-zA-Z]'), preg_quote($mask));
-		$this->errorMessage = $message ? : self::$message;
+		$this->errorMessage = $message;
 
 		return $this;
 	}
@@ -109,13 +115,12 @@ class Mask extends Nette\Forms\Controls\TextInput {
 	 */
 	public function getControl() {
 		$control = parent::getControl();
-
 		$this->createRule();
-
 		if ($this->settings) {
 			$control->data('mask-input', $this->settings);
 		}
 
 		return $control;
 	}
+
 }

@@ -7,7 +7,7 @@ use Nette\Forms\Controls\TextArea;
 class Editor extends TextArea {
 
 	/**
-	 * @param $value
+	 * @param string $value
 	 * @return \Nette\Forms\Controls\TextBase
 	 */
 	public function setValue($value) {
@@ -25,4 +25,5 @@ class Editor extends TextArea {
 
 		return $control;
 	}
+
 }
