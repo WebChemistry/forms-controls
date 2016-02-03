@@ -2,9 +2,29 @@
 
 namespace WebChemistry\Forms\Controls;
 
+use WebChemistry\Forms\ControlException;
 use WebChemistry\Forms\Controls;
 
 trait TForm {
+
+	/** @var array */
+	private $recaptcha = [
+		'api' => NULL,
+		'secret' => NULL
+	];
+
+	/** @var bool */
+	private $isRecaptcha = FALSE;
+
+	/**
+	 * @param array $recaptchaConfig
+	 * @return self
+	 */
+	public function setRecaptchaConfig(array $recaptchaConfig) {
+		$this->recaptcha = array_merge($this->recaptcha, $recaptchaConfig);
+
+		return $this;
+	}
 
 	/**
 	 * @param bool  $deep
@@ -24,21 +44,18 @@ trait TForm {
 	 * @param string $name
 	 * @param null   $label
 	 * @return Recaptcha
-	 * @throws \Exception
+	 * @throws ControlException
 	 */
 	public function addRecaptcha($name, $label = NULL) {
 		if ($this->isRecaptcha) {
-			throw new \Exception('Recaptcha: You can add only one.');
+			throw new ControlException('Recaptcha: You can add only one.');
 		}
-
 		if (!$this->recaptcha['secret']) {
-			throw new \Exception('Recaptcha: You must set secret key in config.');
+			throw new ControlException('Recaptcha: You must set secret key in config.');
 		}
-
-		if (!$this->recaptcha['recaptcha']['api']) {
-			throw new \Exception('Recaptcha: You must set api key in config.');
+		if (!$this->recaptcha['api']) {
+			throw new ControlException('Recaptcha: You must set api key in config.');
 		}
-
 		$this->isRecaptcha = TRUE;
 
 		return $this[$name] = new Recaptcha($this->recaptcha['api'], $this->recaptcha['secret'], $label);

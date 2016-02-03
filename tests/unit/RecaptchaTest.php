@@ -12,10 +12,11 @@ class RecaptchaTest extends \PHPUnit_Framework_TestCase {
 	public function testControl() {
 		$form = new Form;
 
-		$recaptcha = new \WebChemistry\Forms\Controls\Recaptcha('aev464vaew8vaet8', 'a1evt88av18avte');
-
-		$form->addComponent($recaptcha, 'recaptcha');
-
+		$form->setRecaptchaConfig([
+			'secret' => 'a1evt88av18avte',
+			'api' => 'aev464vaew8vaet8'
+		]);
+		$recaptcha = $form->addRecaptcha('recaptcha');
 		$this->assertSame('aev464vaew8vaet8', $recaptcha->getApiKey());
 
 		$this->assertStringEqualsFile(E::dumpedFile('recaptcha'), $recaptcha->getControl());
