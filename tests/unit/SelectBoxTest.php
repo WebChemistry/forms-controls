@@ -18,28 +18,34 @@ class SelectBoxTest extends \Codeception\TestCase\Test {
 			->setTranslate(TRUE);
 
 		// Translate false
+		$form['translateFalse']->getLabel();
 		$form['translateFalse']->getControl();
 		$this->assertSame([
-			0 => 'Prompt'
+			'label', 'Prompt'
 		], MockTranslator::$toTranslate);
 		MockTranslator::$toTranslate = [];
 
 		// Translate false, empty prompt
+		$form['translateFalseEmptyPrompt']->getLabel();
 		$form['translateFalseEmptyPrompt']->getControl();
-		$this->assertSame([], MockTranslator::$toTranslate);
+		$this->assertSame([
+			'label'
+		], MockTranslator::$toTranslate);
 		MockTranslator::$toTranslate = [];
 
 		// Translate
+		$form['translate']->getLabel();
 		$form['translate']->getControl();
 		$this->assertSame([
-			'Prompt', 'a', 'b', 'c'
+			'label', 'Prompt', 'a', 'b', 'c'
 		], MockTranslator::$toTranslate);
 		MockTranslator::$toTranslate = [];
 
 		// Translate, empty prompt
+		$form['translateEmptyPrompt']->getLabel();
 		$form['translateEmptyPrompt']->getControl();
 		$this->assertSame([
-			'a', 'b', 'c'
+			'label', 'a', 'b', 'c'
 		], MockTranslator::$toTranslate);
 		MockTranslator::$toTranslate = [];
 	}

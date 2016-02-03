@@ -13,14 +13,18 @@ class RadioListTest extends \Codeception\TestCase\Test {
 			->setTranslate(TRUE);
 
 		// Translate false
+		$form['translateFalse']->getLabel();
 		$form['translateFalse']->getControl();
-		$this->assertSame([], RadioListMockTranslator::$toTranslate);
+		$this->assertSame([
+			'label'
+		], RadioListMockTranslator::$toTranslate);
 		RadioListMockTranslator::$toTranslate = [];
 
 		// Translate
+		$form['translate']->getLabel();
 		$form['translate']->getControl();
 		$this->assertSame([
-			'a', 'b', 'c'
+			'label', 'a', 'b', 'c'
 		], RadioListMockTranslator::$toTranslate);
 		RadioListMockTranslator::$toTranslate = [];
 	}

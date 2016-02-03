@@ -2,31 +2,34 @@
 
 namespace WebChemistry\Forms\Controls;
 
+use Nette\Forms\Controls\BaseControl;
+use Nette\Forms\Helpers;
+use Nette\Utils\Html;
+
 class SelectBox extends \Nette\Forms\Controls\SelectBox {
 
 	/** @var bool */
 	private $translate = TRUE;
 
-	/** @var bool */
-	private $translateCount = 0;
-
 	/**
-	 * Returns translated string.
+	 * Generates control's HTML element.
 	 *
-	 * @param  mixed
-	 * @param  int
-	 * @return string
+	 * @return Html
 	 */
-	public function translate($value, $count = NULL) {
-		if ($this->translate) {
-			return parent::translate($value, $count);
+	public function getControl() {
+		$items = $this->getPrompt() === FALSE ? [] : ['' => $this->translate($this->getPrompt())];
+		foreach ($this->getItems() as $key => $value) {
+			$items[$this->translate && is_array($value) ? $this->translate($key) : $key] =
+				$this->translate ? $this->translate($value) : $value;
 		}
-		if ($this->translateCount >= 1 || $this->prompt === FALSE) {
-			return $value;
-		}
-		$this->translateCount++;
 
-		return parent::translate($value, $count);
+		return Helpers::createSelectBox(
+			$items,
+			[
+				'selected?' => $this->value,
+				'disabled:' => is_array($this->disabled) ? $this->disabled : NULL,
+			]
+		)->addAttributes(BaseControl::getControl()->attrs);
 	}
 
 	/**
