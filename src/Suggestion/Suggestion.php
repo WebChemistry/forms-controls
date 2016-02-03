@@ -5,7 +5,7 @@ namespace WebChemistry\Forms\Controls;
 use Nette;
 use WebChemistry\Forms\Exception;
 
-class Suggestion extends TextInput {
+class Suggestion extends Nette\Forms\Controls\TextInput {
 
 	/** @var array */
 	protected $settings = array();

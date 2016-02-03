@@ -69,16 +69,13 @@ class DateTest extends \PHPUnit_Framework_TestCase {
 		$presenter->run(new \Nette\Application\Request('Date', 'POST', array(
 			'do' => 'form-submit'
 		), array(
-			'date' => array(
-				'js' => '27.07.2015 14:00'
-			)
+			'date' => '27.07.2015 14:00'
 		)));
 
 		/** @var \Form $form */
 		$form = $presenter['form'];
 
 		$this->assertTrue($form->isSubmitted());
-		$this->assertTrue($form->hasErrors());
-		$this->assertSame(sprintf('Date is not in expected format (example of correct date: %s).', date('j.m.Y H:i', time())), $form->errors[0]);
+		$this->assertFalse($form->hasErrors());
 	}
 }

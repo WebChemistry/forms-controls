@@ -2,6 +2,7 @@
 
 namespace WebChemistry\Forms\Controls;
 
+use Nette\Forms\Controls\TextArea;
 
 class Editor extends TextArea {
 
