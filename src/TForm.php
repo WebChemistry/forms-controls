@@ -151,4 +151,21 @@ trait TForm {
 		return $this[$name] = new Controls\CheckboxList($label, $items);
 	}
 
+	/**
+	 * Adds select box control that allows multiple item selection.
+	 * @param  string  control name
+	 * @param  string  label
+	 * @param  array   options from which to choose
+	 * @param  int     number of rows that should be visible
+	 * @return Controls\MultiSelectBox
+	 */
+	public function addMultiSelect($name, $label = NULL, array $items = NULL, $size = NULL) {
+		$control = new Controls\MultiSelectBox($label, $items);
+		if ($size > 1) {
+			$control->setAttribute('size', (int) $size);
+		}
+
+		return $this[$name] = $control;
+	}
+
 }

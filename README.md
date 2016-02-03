@@ -68,7 +68,7 @@ $form->addTags('tags', 'Tags');
 $form->addPreviewUpload('upload', 'Upload', 'path/to/upload/dir');
 ```
 
-## Vypnutí překladu u CheckboxList, RadioList a SelectBox
+## Vypnutí překladu u CheckboxList, RadioList, SelectBox, MultiSelectBox
 
 ```php
 $form->addCheckboxList('checkboxList', NULL, ['myItem'])
