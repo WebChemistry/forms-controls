@@ -116,4 +116,39 @@ trait TForm {
 		return $this[$name] = new Controls\Upload($label, $uploadPath);
 	}
 
+	/**
+	 * Adds select box control that allows single item selection.
+	 * @param  string  control name
+	 * @param  string  label
+	 * @param  array   items from which to choose
+	 * @param  int     number of rows that should be visible
+	 * @return Controls\SelectBox
+	 */
+	public function addSelect($name, $label = NULL, array $items = NULL, $size = NULL) {
+		$control = new Controls\SelectBox($label, $items);
+		if ($size > 1) {
+			$control->setAttribute('size', (int) $size);
+		}
+		return $this[$name] = $control;
+	}
+
+	/**
+	 * Adds set of radio button controls to the form.
+	 * @param  string  control name
+	 * @param  string  label
+	 * @param  array   options from which to choose
+	 * @return Controls\RadioList
+	 */
+	public function addRadioList($name, $label = NULL, array $items = NULL) {
+		return $this[$name] = new Controls\RadioList($label, $items);
+	}
+
+	/**
+	 * Adds set of checkbox controls to the form.
+	 * @return Controls\CheckboxList
+	 */
+	public function addCheckboxList($name, $label = NULL, array $items = NULL) {
+		return $this[$name] = new Controls\CheckboxList($label, $items);
+	}
+
 }
