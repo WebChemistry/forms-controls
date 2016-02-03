@@ -14,9 +14,18 @@ class DatePresenter extends Presenter {
 	protected function createComponentForm() {
 		$form = new \Form;
 
-		$form->addDate('date')
+		$form->addDate('date', '', 'j.m.Y H:i')
 			 ->setType(Date::TIMESTAMP);
 
 		return $form;
 	}
+
+	protected function createComponentDefaultDate() {
+		$form = new \Form;
+
+		$form->addDate('date');
+
+		return $form;
+	}
+
 }

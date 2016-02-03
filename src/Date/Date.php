@@ -23,15 +23,18 @@ class Date extends Nette\Forms\Controls\TextInput {
 	/** @var string */
 	protected $format;
 
+	/** @var string */
+	public static $dateFormat = 'Y-m-d H:i';
+
 	/**
 	 * @param string   $caption
 	 * @param string $format
 	 * @throws \Exception
 	 */
-	public function __construct($caption = NULL, $format = 'j.m.Y H:i') {
+	public function __construct($caption = NULL, $format = NULL) {
 		parent::__construct($caption);
 
-		$this->setFormat($format);
+		$this->setFormat($format ? : self::$dateFormat);
 	}
 
 	/**

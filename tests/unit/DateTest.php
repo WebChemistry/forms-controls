@@ -77,5 +77,23 @@ class DateTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertTrue($form->isSubmitted());
 		$this->assertFalse($form->hasErrors());
+
+		// Filled default date
+		$presenter = $this->presenterFactory->createPresenter('Date');
+		$presenter->autoCanonicalize = FALSE;
+
+		$presenter->run(new \Nette\Application\Request('Date', 'POST', array(
+			'do' => 'defaultDate-submit'
+		), array(
+			'date' => '27.07.2015 14:00'
+		)));
+
+		/** @var \Form $form */
+		$form = $presenter['defaultDate'];
+
+		$this->assertTrue($form->isSubmitted());
+		$this->assertTrue($form->hasErrors());
+		$this->assertSame(sprintf('Date is not in expected format (example of correct date: %s).', date('Y-m-d H:i', time())), $form->errors[0]);
 	}
+
 }

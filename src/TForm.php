@@ -94,9 +94,10 @@ trait TForm {
 	/**
 	 * @param string $name
 	 * @param string $caption
+	 * @param string $format
 	 * @return Date
 	 */
-	public function addDate($name, $caption = NULL, $format = 'j.m.Y H:i') {
+	public function addDate($name, $caption = NULL, $format = NULL) {
 		$control = new Date($caption, $format);
 
 		return $this[$name] = $control;
