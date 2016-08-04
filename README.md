@@ -15,6 +15,13 @@ class MyForms extends Nette\Application\UI\Forms {
 }
 ```
 
+můžeme přidat i extension, která usnadní nastavení jednotlivých komponent
+
+```php
+extensions:
+    formControls: WebChemistry\Forms\DI\FormControlsExtension
+```
+
 ## Date
 
 ```php
