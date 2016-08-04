@@ -19,6 +19,7 @@
 	"require-dev": {
 		"codeception/codeception": "^2.2",
 		"nette/application": "^2.4",
-		"webchemistry/testing-helpers": "dev-master"
+		"webchemistry/testing-helpers": "dev-master",
+		"nette/di": "^2.3"
 	}
 }
