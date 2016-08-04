@@ -1,2 +1,4 @@
 tests/temp/cache
 tests/temp/log
+vendor/
+composer.lock

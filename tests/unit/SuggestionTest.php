@@ -1,16 +1,8 @@
 <?php
 
-use Tester\Assert as A;
-
 class SuggestionTest extends \PHPUnit_Framework_TestCase {
 
-	protected function setUp() {
-		A::$onFailure = array($this, 'failure');
-	}
-
-	public function failure(\Exception $e) {
-		$this->fail($e->getMessage());
-	}
+	use \WebChemistry\Test\TMethods;
 
 	protected function tearDown() {
 	}
@@ -34,7 +26,7 @@ class SuggestionTest extends \PHPUnit_Framework_TestCase {
 			'query2'
 		), $sug->call('query'));
 
-		A::throws(function () use ($sug) {
+		$this->assertThrowException(function () use ($sug) {
 			$sug->getControl();
 		}, 'Nette\InvalidStateException');
 

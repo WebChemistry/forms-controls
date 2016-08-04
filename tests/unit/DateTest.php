@@ -2,11 +2,27 @@
 
 class DateTest extends \PHPUnit_Framework_TestCase {
 
-	/** @var \Nette\Application\IPresenterFactory */
-	private $presenterFactory;
+	/** @var \WebChemistry\Test\Components\Form */
+	private $forms;
 
 	protected function setUp() {
-		$this->presenterFactory = E::getByType('Nette\Application\IPresenterFactory');
+		$this->forms = $forms = \Webchemistry\Test\Services::forms(TRUE);
+
+		$forms->addForm('form', function () {
+			$form = new \Form;
+
+			$form->addDate('date', '', 'j.m.Y H:i')
+				->setType(\WebChemistry\Forms\Controls\Date::TIMESTAMP);
+
+			return $form;
+		});
+		$forms->addForm('defaultDate', function () {
+			$form = new \Form;
+
+			$form->addDate('date');
+
+			return $form;
+		});
 	}
 
 	protected function tearDown() {
@@ -29,67 +45,32 @@ class DateTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testSubmit() {
-		$presenter = $this->presenterFactory->createPresenter('Date');
-		$presenter->autoCanonicalize = FALSE;
-
-		$presenter->run(new \Nette\Application\Request('Date', 'POST', array(
-			'do' => 'form-submit'
-		), array(
+		$result = $this->forms->createRequest('form', [
 			'date' => '27.07.2015 14:00'
-		)));
-
-		/** @var \Form $form */
-		$form = $presenter['form'];
+		]);
+		$form = $result->getForm();
 
 		$this->assertTrue($form->isSubmitted());
 		$this->assertFalse($form->hasErrors());
 		$this->assertSame(strtotime('27.07.2015 14:00'), $form->values['date']);
+	}
 
-		// Filled seconds
-		$presenter = $this->presenterFactory->createPresenter('Date');
-		$presenter->autoCanonicalize = FALSE;
-
-		$presenter->run(new \Nette\Application\Request('Date', 'POST', array(
-			'do' => 'form-submit'
-		), array(
+	public function testInvalid() {
+		$result = $this->forms->createRequest('form', [
 			'date' => '27.07.2015 14:00:45'
-		)));
-
-		/** @var \Form $form */
-		$form = $presenter['form'];
+		]);
+		$form = $result->getForm();
 
 		$this->assertTrue($form->isSubmitted());
 		$this->assertTrue($form->hasErrors());
 		$this->assertSame(sprintf('Date is not in expected format (example of correct date: %s).', date('j.m.Y H:i', time())), $form->errors[0]);
+	}
 
-		// Invalid
-		$presenter = $this->presenterFactory->createPresenter('Date');
-		$presenter->autoCanonicalize = FALSE;
-
-		$presenter->run(new \Nette\Application\Request('Date', 'POST', array(
-			'do' => 'form-submit'
-		), array(
+	public function testSubmitDefaultValue() {
+		$result = $this->forms->createRequest('defaultDate', [
 			'date' => '27.07.2015 14:00'
-		)));
-
-		/** @var \Form $form */
-		$form = $presenter['form'];
-
-		$this->assertTrue($form->isSubmitted());
-		$this->assertFalse($form->hasErrors());
-
-		// Filled default date
-		$presenter = $this->presenterFactory->createPresenter('Date');
-		$presenter->autoCanonicalize = FALSE;
-
-		$presenter->run(new \Nette\Application\Request('Date', 'POST', array(
-			'do' => 'defaultDate-submit'
-		), array(
-			'date' => '27.07.2015 14:00'
-		)));
-
-		/** @var \Form $form */
-		$form = $presenter['defaultDate'];
+		]);
+		$form = $result->getForm();
 
 		$this->assertTrue($form->isSubmitted());
 		$this->assertTrue($form->hasErrors());

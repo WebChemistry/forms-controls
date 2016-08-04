@@ -1,16 +1,41 @@
 <?php
 
-use Tester\Assert as A;
+use WebChemistry\Test\Services;
 
 class MaskTest extends \PHPUnit_Framework_TestCase {
 
-	/** @var \Nette\Application\IPresenterFactory */
-	private $presenterFactory;
+	use \WebChemistry\Test\TMethods;
+
+	/** @var \WebChemistry\Test\Components\Form */
+	private $forms;
 
 	protected function setUp() {
-		$this->presenterFactory = E::getByType('Nette\Application\IPresenterFactory');
+		$this->forms = $forms = Services::forms(TRUE);
+		$forms->addForm('form', function () {
+			$form = new \Form;
 
-		A::$onFailure = array($this, 'failure');
+			$form->addMask('mask')
+				->setMask('999 aaa');
+
+			$form->addMask('regex')
+				->setRegex('[0-9]{3} [a-z]{3}');
+
+			return $form;
+		});
+
+		$forms->addForm('required', function () {
+			$form = new \Form;
+
+			$form->addMask('mask')
+				->setRequired()
+				->setMask('999 aaa');
+
+			$form->addMask('regex')
+				->setRequired()
+				->setRegex('[0-9]{3} [a-z]{3}');
+
+			return $form;
+		});
 	}
 
 	public function failure(\Exception $e) {
@@ -32,11 +57,11 @@ class MaskTest extends \PHPUnit_Framework_TestCase {
 		$branch = $rules[0]->branch->getIterator();
 		$this->assertSame('[0-9][0-9][0-9] [0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z] [a-zA-Z][a-zA-Z][a-zA-Z]', $branch[0]->arg);
 
-		A::throws(function () use ($mask) {
+		$this->assertThrowException(function () use ($mask) {
 			$mask->setMask('999');
 		}, 'Exception');
 
-		A::throws(function () use ($mask) {
+		$this->assertThrowException(function () use ($mask) {
 			$mask->setRegex('999');
 		}, 'Exception');
 	}
@@ -54,19 +79,35 @@ class MaskTest extends \PHPUnit_Framework_TestCase {
 		$this->assertSame('[a-z]{5}[0-9]?(a|b)+', $branch[0]->arg);
 	}
 
-	public function testSubmitInvalid() {
-		$presenter = $this->presenterFactory->createPresenter('Mask');
-		$presenter->autoCanonicalize = FALSE;
+	public function testS() {
+		$forms = Services::forms();
+		$forms->addForm('my', function () {
+			$form = new \Form;
 
-		$presenter->run(new \Nette\Application\Request('Mask', 'POST', array(
-			'do' => 'form-submit'
-		), array(
+			$form->addMask('mask')
+				->setMask('999 aaa');
+
+			$form->addMask('regex')
+				->setRegex('[0-9]{3} [a-z]{3}');
+
+			return $form;
+		});
+
+		$response = $forms->createRequest('my', [
+			'mask' => 'xsda'
+		]);
+		$form = $response->getForm();
+
+		$this->assertTrue($form->isSubmitted());
+		$this->assertSame('xsda', $form['mask']->getValue());
+	}
+
+	public function testSubmitInvalid() {
+		$result = $this->forms->createRequest('form', [
 			'mask' => 'xsda',
 			'regex' => 'asd546'
-		)));
-
-		/** @var \Form $form */
-		$form = $presenter['form'];
+		]);
+		$form = $result->getForm();
 
 		$this->assertTrue($form->isSubmitted());
 		$this->assertTrue($form->hasErrors());
@@ -79,18 +120,11 @@ class MaskTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testSubmit() {
-		$presenter = $this->presenterFactory->createPresenter('Mask');
-		$presenter->autoCanonicalize = FALSE;
-
-		$presenter->run(new \Nette\Application\Request('Mask', 'POST', array(
-			'do' => 'form-submit'
-		), array(
+		$result = $this->forms->createRequest('form', [
 			'mask' => '124 asd',
 			'regex' => '235 wes'
-		)));
-
-		/** @var \Form $form */
-		$form = $presenter['form'];
+		]);
+		$form = $result->getForm();
 
 		$this->assertTrue($form->isSubmitted());
 		$this->assertFalse($form->hasErrors());
@@ -101,32 +135,19 @@ class MaskTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testNotRequired() {
-		$presenter = $this->presenterFactory->createPresenter('Mask');
-		$presenter->autoCanonicalize = FALSE;
-
-		$presenter->run(new \Nette\Application\Request('Mask', 'POST', array(
-			'do' => 'form-submit'
-		)));
-
-		/** @var \Form $form */
-		$form = $presenter['form'];
+		$result = $this->forms->createRequest('form');
+		$form = $result->getForm();
 
 		$this->assertTrue($form->isSubmitted());
 		$this->assertFalse($form->hasErrors());
 	}
 
 	public function testRequired() {
-		$presenter = $this->presenterFactory->createPresenter('Mask');
-		$presenter->autoCanonicalize = FALSE;
-
-		$presenter->run(new \Nette\Application\Request('Mask', 'POST', array(
-			'do' => 'required-submit'
-		)));
-
-		/** @var \Form $form */
-		$form = $presenter['required'];
+		$result = $this->forms->createRequest('required');
+		$form = $result->getForm();
 
 		$this->assertTrue($form->isSubmitted());
 		$this->assertTrue($form->hasErrors());
 	}
+
 }

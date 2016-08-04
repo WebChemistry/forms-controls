@@ -42,11 +42,11 @@ class TagsTest extends \PHPUnit_Framework_TestCase {
 		$tags = $form->addTags('tags')
 					 ->setDefaultValue(NULL);
 
-		$this->assertStringEqualsFile(E::dumpedFile('tagsNull'), $tags->getControl());
+		$this->assertStringEqualsFile(__DIR__ . '/expected/tagsNull.dmp', $tags->getControl());
 
 		$tags = $form->addTags('tagsTwo')
 					 ->setDefaultValue(array('tag', 'one', 'two'));
 
-		$this->assertStringEqualsFile(E::dumpedFile('tagsRender'), $tags->getControl());
+		$this->assertStringEqualsFile(__DIR__ . '/expected/tagsRender.dmp', $tags->getControl());
 	}
 }

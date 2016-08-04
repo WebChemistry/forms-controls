@@ -1,9 +1,22 @@
 <?php
 
+use WebChemistry\Test\Services;
+
 class RecaptchaTest extends \PHPUnit_Framework_TestCase {
 
-	protected function setUp() {
+	/** @var \WebChemistry\Test\Components\Form */
+	private $forms;
 
+	protected function setUp() {
+		$this->forms = $forms = Services::forms(TRUE);
+
+		$forms->addForm('form', function () {
+			$form = new \Form();
+
+			$form['recaptcha'] = new \WebChemistry\Forms\Controls\Recaptcha('a4f45afs45afs', '5ag48ga4gea8aeg');
+
+			return $form;
+		});
 	}
 
 	protected function tearDown() {
@@ -19,44 +32,34 @@ class RecaptchaTest extends \PHPUnit_Framework_TestCase {
 		$recaptcha = $form->addRecaptcha('recaptcha');
 		$this->assertSame('aev464vaew8vaet8', $recaptcha->getApiKey());
 
-		$this->assertStringEqualsFile(E::dumpedFile('recaptcha'), $recaptcha->getControl());
+		$this->assertStringEqualsFile(__DIR__ . '/expected/recaptcha.dmp', $recaptcha->getControl());
 	}
 
 	public function testSubmit() {
-		$presenterFactory = E::getByType('Nette\Application\IPresenterFactory');
-
-		/** @var \App\Presenters\RecaptchaPresenter $presenter */
-		$presenter = $presenterFactory->createPresenter('Recaptcha');
-		$presenter->autoCanonicalize = FALSE;
-
-		$presenter->run(new \Nette\Application\Request('Recaptcha', 'POST', array(
+		$result = $this->forms->createRequest('form', [
 			'do' => 'form-submit'
-		)));
+		]);
 
-		/** @var \Form $form */
-		$form = $presenter['form'];
+		$form = $result->getForm();
 
 		$this->assertFalse($form->isValid());
 		$this->assertSame(array(
 			0 => 'Please fill antispam.'
 		), $form->getErrors());
+	}
 
-		/** @var \App\Presenters\RecaptchaPresenter $presenter */
-		$presenter = $presenterFactory->createPresenter('Recaptcha');
-		$presenter->autoCanonicalize = FALSE;
-
-		$presenter->run(new \Nette\Application\Request('Recaptcha', 'POST', array(
-			'do' => 'form-submit'
-		), array(
+	public function testInvalidSubmit() {
+		$result = $this->forms->createRequest('form', [
+			'do' => 'form-submit',
 			'g-recaptcha-response' => '48sf8sagd48gas48as84asf'
-		)));
+		]);
 
-		/** @var \Form $form */
-		$form = $presenter['form'];
+		$form = $result->getForm();
 
 		$this->assertFalse($form->isValid());
 		$this->assertSame(array(
 			0 => 'Antispam detection was not successful.'
 		), $form->getErrors());
 	}
+
 }
