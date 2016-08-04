@@ -20,8 +20,7 @@ class Editor extends TextArea {
 	public function getControl() {
 		$control = parent::getControl();
 
-		$control->class[] = 'editor-input ckeditor';
-		$control->data('novalidate', '');
+		$control->appendAttribute('class', ['editor-input', 'ckeditor']);
 
 		return $control;
 	}
