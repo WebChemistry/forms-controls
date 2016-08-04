@@ -4,6 +4,8 @@ use WebChemistry\Test\Services;
 
 class RecaptchaTest extends \PHPUnit_Framework_TestCase {
 
+	use \WebChemistry\Test\TMethods;
+
 	/** @var \WebChemistry\Test\Components\Form */
 	private $forms;
 
@@ -13,7 +15,17 @@ class RecaptchaTest extends \PHPUnit_Framework_TestCase {
 		$forms->addForm('form', function () {
 			$form = new \Form();
 
-			$form['recaptcha'] = new \WebChemistry\Forms\Controls\Recaptcha('a4f45afs45afs', '5ag48ga4gea8aeg');
+			$form['recaptcha'] = $recaptcha = new \WebChemistry\Forms\Controls\Recaptcha();
+
+			$recaptcha->setApiKey('api');
+			$recaptcha->setSecretKey('secret');
+
+			return $form;
+		});
+		$forms->addForm('withoutKeys', function () {
+			$form = new \Form();
+
+			$form['recaptcha'] = $recaptcha = new \WebChemistry\Forms\Controls\Recaptcha();
 
 			return $form;
 		});
@@ -25,12 +37,10 @@ class RecaptchaTest extends \PHPUnit_Framework_TestCase {
 	public function testControl() {
 		$form = new Form;
 
-		$form->setRecaptchaConfig([
-			'secret' => 'a1evt88av18avte',
-			'api' => 'aev464vaew8vaet8'
-		]);
 		$recaptcha = $form->addRecaptcha('recaptcha');
-		$this->assertSame('aev464vaew8vaet8', $recaptcha->getApiKey());
+		$recaptcha->setApiKey('api');
+		$recaptcha->setSecretKey('secret');
+		$this->assertSame('api', $recaptcha->getApiKey());
 
 		$this->assertStringEqualsFile(__DIR__ . '/expected/recaptcha.dmp', $recaptcha->getControl());
 	}
@@ -60,6 +70,15 @@ class RecaptchaTest extends \PHPUnit_Framework_TestCase {
 		$this->assertSame(array(
 			0 => 'Antispam detection was not successful.'
 		), $form->getErrors());
+	}
+
+	public function testSubmitWithoutKeys() {
+		$this->assertThrowException(function () {
+			$this->forms->createRequest('withoutKeys', [
+				'do' => 'form-submit',
+				'g-recaptcha-response' => '48sf8sagd48gas48as84asf'
+			]);
+		}, 'WebChemistry\Forms\ControlException');
 	}
 
 }

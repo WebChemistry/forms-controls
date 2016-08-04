@@ -19,16 +19,18 @@ class Recaptcha extends TextArea {
 	/** @var string */
 	private $secretKey;
 
+	/** @var string */
+	private static $defaultApiKey;
+
+	/** @var string */
+	private static $defaultSecretKey;
+
 	/**
-	 * @param string $apiKey
-	 * @param string $secretKey
 	 * @param string $label
 	 */
-	public function __construct($apiKey, $secretKey, $label = NULL) {
+	public function __construct($label = NULL) {
 		parent::__construct($label);
 
-		$this->setApiKey($apiKey);
-		$this->setSecretKey($secretKey);
 		$this->setOmitted();
 		$this->addRule([$this, 'validateRecaptcha']);
 	}
@@ -37,22 +39,14 @@ class Recaptcha extends TextArea {
 	 * @return string
 	 */
 	protected function getValidMessage() {
-		if (isset(Validator::$messages[self::VALID])) {
-			return Validator::$messages[self::VALID];
-		} else {
-			return 'Antispam detection was not successful.';
-		}
+		return isset(Validator::$messages[self::VALID]) ? Validator::$messages[self::VALID] : 'Antispam detection was not successful.';
 	}
 
 	/**
 	 * @return string
 	 */
 	protected function getFilledMessage() {
-		if (isset(Validator::$messages[self::FILLED])) {
-			return Validator::$messages[self::FILLED];
-		} else {
-			return 'Please fill antispam.';
-		}
+		return isset(Validator::$messages[self::FILLED]) ? Validator::$messages[self::FILLED] : 'Please fill antispam.';
 	}
 
 	/**
@@ -66,6 +60,7 @@ class Recaptcha extends TextArea {
 			return TRUE;
 		}
 
+		$this->validateKeys();
 		$url = new Url();
 		$url->setHost('www.google.com')
 			->setScheme('https')
@@ -74,24 +69,18 @@ class Recaptcha extends TextArea {
 			->setQueryParameter('response', $httpData['g-recaptcha-response']);
 		$data = json_decode(file_get_contents((string) $url));
 
-		if (isset($data->success) && $data->success === TRUE) {
-			return TRUE;
-		} else {
+		if (!isset($data->success) || $data->success !== TRUE) {
 			$this->addError($this->getValidMessage());
-
-			return TRUE;
 		}
+
+		return TRUE;
 	}
 
 	/**
 	 * @param string $apiKey
 	 * @return Recaptcha
-	 * @throws ControlException
 	 */
 	public function setApiKey($apiKey) {
-		if (!is_string($apiKey)) {
-			throw new ControlException('Recaptcha: Api key must be string.');
-		}
 		$this->apiKey = $apiKey;
 
 		return $this;
@@ -100,12 +89,8 @@ class Recaptcha extends TextArea {
 	/**
 	 * @param string $secretKey
 	 * @return Recaptcha
-	 * @throws ControlException
 	 */
 	public function setSecretKey($secretKey) {
-		if (!is_string($secretKey)) {
-			throw new ControlException('Recaptcha: Secret key must be string.');
-		}
 		$this->secretKey = $secretKey;
 
 		return $this;
@@ -115,18 +100,36 @@ class Recaptcha extends TextArea {
 	 * @return string
 	 */
 	public function getApiKey() {
-		return $this->apiKey;
+		return $this->apiKey ?: self::$defaultApiKey;
+	}
+
+	protected function validateKeys() {
+		$apiKey = $this->getApiKey();
+		$sercretKey = $this->secretKey ?: self::$defaultSecretKey;
+		if (!$apiKey || !$sercretKey) {
+			throw new ControlException('Api and secret key must be set.');
+		}
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getControl() {
+		$this->validateKeys();
 		ob_start();
 		$apiKey = $this->getApiKey();
 		require __DIR__ . '/templates/recaptcha.phtml';
 
 		return ob_get_clean();
+	}
+
+	/**
+	 * @param string $apiKey
+	 * @param string $secretKey
+	 */
+	public static function configure($apiKey, $secretKey) {
+		self::$defaultApiKey = $apiKey;
+		self::$defaultSecretKey = $secretKey;
 	}
 
 }
