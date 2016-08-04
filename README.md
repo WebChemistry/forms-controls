@@ -1,5 +1,7 @@
 # Komponenty pro Nette formuláře
 
+[![Build Status](https://travis-ci.org/WebChemistry/testing-helpers.svg?branch=master)](https://travis-ci.org/WebChemistry/testing-helpers)
+
 ## Instalace
 
 Soubory v client-side zalinkujeme do souboru.
