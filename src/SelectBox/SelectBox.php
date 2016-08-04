@@ -18,6 +18,7 @@ class SelectBox extends \Nette\Forms\Controls\SelectBox {
 
 	/**
 	 * Sets options and option groups from which to choose.
+	 *
 	 * @return self
 	 */
 	public function setItems(array $items, $useKeys = TRUE) {
@@ -62,7 +63,7 @@ class SelectBox extends \Nette\Forms\Controls\SelectBox {
 	}
 
 	/**
-	 * @param $translate
+	 * @param bool $translate
 	 * @return self
 	 */
 	public function setTranslate($translate) {

@@ -42,7 +42,7 @@ class RadioList extends \Nette\Forms\Controls\RadioList {
 	}
 
 	/**
-	 * @param $translate
+	 * @param bool $translate
 	 * @return self
 	 */
 	public function setTranslate($translate) {

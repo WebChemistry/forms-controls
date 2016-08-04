@@ -3,8 +3,10 @@
 namespace WebChemistry\Forms\Controls;
 
 use Nette\Application\IPresenter;
+use Nette\ComponentModel\IComponent;
 use Nette\Forms\Controls\TextInput;
 use Nette\Forms\Validator;
+use Nette\Utils\Html;
 
 class Tags extends TextInput {
 
@@ -28,8 +30,8 @@ class Tags extends TextInput {
 	}
 
 	/**
-	 * @param bool|FALSE $value
-	 * @return Tags
+	 * @param bool $value
+	 * @return self
 	 */
 	public function usePlaceholder($value = FALSE) {
 		$this->usePlaceholder = $value;
@@ -40,8 +42,8 @@ class Tags extends TextInput {
 	/**
 	 * Changes control's HTML attribute.
 	 *
-	 * @param  string name
-	 * @param  mixed  value
+	 * @param string $name
+	 * @param mixed $value
 	 * @return self
 	 */
 	public function setAttribute($name, $value = TRUE) {
@@ -73,8 +75,7 @@ class Tags extends TextInput {
 	/**
 	 * This method will be called when the component becomes attached to Form.
 	 *
-	 * @param  Nette\ComponentModel\IComponent
-	 * @return void
+	 * @param IComponent $form
 	 */
 	protected function attached($form) {
 		parent::attached($form);
@@ -101,7 +102,7 @@ class Tags extends TextInput {
 	}
 
 	/**
-	 * @return \Nette\Utils\Html
+	 * @return Html
 	 */
 	public function getControl() {
 		$control = parent::getControl();
@@ -114,11 +115,12 @@ class Tags extends TextInput {
 
 	/**
 	 * @param mixed $value
-	 * @return Tags
+	 * @return self
 	 */
 	public function setValue($value) {
 		$this->rawValue = $this->value = $value;
 
 		return $this;
 	}
+
 }

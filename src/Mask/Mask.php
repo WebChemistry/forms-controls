@@ -22,8 +22,8 @@ class Mask extends Nette\Forms\Controls\TextInput {
 	protected $errorMessage;
 
 	/**
-	 * @param  string $label  label
-	 * @param  int    $maxLength maximum number of characters the user may enter
+	 * @param string $label label
+	 * @param int $maxLength maximum number of characters the user may enter
 	 */
 	public function __construct($label = NULL, $maxLength = NULL) {
 		parent::__construct($label, $maxLength);

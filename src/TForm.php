@@ -42,7 +42,7 @@ trait TForm {
 
 	/**
 	 * @param string $name
-	 * @param null   $label
+	 * @param null $label
 	 * @return Recaptcha
 	 * @throws ControlException
 	 */

@@ -119,7 +119,7 @@ class Recaptcha extends TextArea {
 	}
 
 	/**
-	 * @return null
+	 * @return string
 	 */
 	public function getControl() {
 		ob_start();

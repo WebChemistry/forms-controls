@@ -18,6 +18,7 @@ class MultiSelectBox extends MultiChoiceControl {
 
 	/**
 	 * Sets options and option groups from which to choose.
+	 *
 	 * @return self
 	 */
 	public function setItems(array $items, $useKeys = TRUE) {
@@ -42,6 +43,7 @@ class MultiSelectBox extends MultiChoiceControl {
 
 	/**
 	 * Generates control's HTML element.
+	 *
 	 * @return Html
 	 */
 	public function getControl() {
@@ -61,7 +63,7 @@ class MultiSelectBox extends MultiChoiceControl {
 	}
 
 	/**
-	 * @param $translate
+	 * @param bool $translate
 	 * @return self
 	 */
 	public function setTranslate($translate) {

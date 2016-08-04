@@ -35,7 +35,7 @@ class CheckboxList extends \Nette\Forms\Controls\CheckboxList {
 	}
 
 	/**
-	 * @param $translate
+	 * @param bool $translate
 	 * @return self
 	 */
 	public function setTranslate($translate) {

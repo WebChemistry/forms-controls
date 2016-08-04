@@ -27,7 +27,7 @@ class Date extends Nette\Forms\Controls\TextInput {
 	public static $dateFormat = 'Y-m-d H:i';
 
 	/**
-	 * @param string   $caption
+	 * @param string $caption
 	 * @param string $format
 	 * @throws \Exception
 	 */

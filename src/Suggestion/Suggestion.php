@@ -33,7 +33,7 @@ class Suggestion extends Nette\Forms\Controls\TextInput {
 	 * @param callback $callback
 	 * @return Suggestion
 	 */
-	public function setCallback($callback) {
+	public function setCallback(callable $callback) {
 		$this->callback = $callback;
 
 		return $this;
@@ -70,7 +70,7 @@ class Suggestion extends Nette\Forms\Controls\TextInput {
 	}
 
 	/**
-	 * @param $q
+	 * @param mixed $q
 	 * @return array
 	 * @throws ControlException
 	 */
