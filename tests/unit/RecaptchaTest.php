@@ -75,7 +75,6 @@ class RecaptchaTest extends \PHPUnit_Framework_TestCase {
 	public function testSubmitWithoutKeys() {
 		$this->assertThrowException(function () {
 			$this->forms->createRequest('withoutKeys', [
-				'do' => 'form-submit',
 				'g-recaptcha-response' => '48sf8sagd48gas48as84asf'
 			]);
 		}, 'WebChemistry\Forms\ControlException');
