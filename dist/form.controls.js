@@ -135,15 +135,19 @@ var _tmp = (function ($, undefined) {
 		addControl: function (name, object) {
 		    if (!helpers.isObject(object)) {
 		        this.printError(name + ' must be object.');
+				return;
             }
             if (!helpers.hasMethod(object, 'init')) {
                 this.printError(name + ' must have init function.');
+				return;
             }
             if (!helpers.hasMethod(object, 'load')) {
                 this.printError(name + ' must have load function.');
+				return;
             }
             if (!helpers.hasMethod(object, 'isEnabled')) {
                 this.printError(name + ' must have isEnabled function.');
+				return;
             }
 			this.controls[name] = object;
 		}
