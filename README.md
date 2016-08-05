@@ -9,7 +9,7 @@ Přilinkujeme ještě tyto extenze, které se stáhnou společně s tímto balí
 
 **Nainstalujeme komponenty do formulářu**
 
-```
+```php
 class MyForms extends Nette\Application\UI\Forms {
     
     use WebChemistry\Forms\Controls\TForm;
