@@ -1,0 +1,9 @@
+[
+	"client/life-cycle/init.js",
+	"client/helpers.js",
+	"client/core.js",
+	"client/components/date.js",
+	"client/components/mask.js",
+	"client/components/suggestion.js",
+	"client/components/tags.js"
+]

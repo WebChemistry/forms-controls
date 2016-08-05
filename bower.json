@@ -1,0 +1,17 @@
+{
+	"name": "webchemistry-form-controls",
+	"main": "dist/form.controls.min.js",
+	"ignore": [
+		"tests",
+		"src",
+		".travis.yml",
+		"composer.json"
+	],
+	"dependencies": {
+		"jquery": ">=1.6",
+		"jquery.tagsinput": ">=1.3",
+		"EasyAutocomplete": ">=1.3",
+		"jquery.inputmask": ">=3.2",
+		"datetimepicker": ">=2.4"
+	}
+}
