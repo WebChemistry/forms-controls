@@ -4,7 +4,8 @@
 
 ## Instalace
 
-Soubory v client-side zalinkujeme do souboru.
+Přidáme balíček webchemistry-form-controls do bower.json a nainstalujeme.
+Přilinkujeme ještě tyto extenze, které se stáhnou společně s tímto balíčkem: EasyAutocomplete, jquery.tagsinput, datetimepicker, jquery.inputmask, jquery
 
 **Nainstalujeme komponenty do formulářu**
 
@@ -82,4 +83,57 @@ $form->addPreviewUpload('upload', 'Upload', 'path/to/upload/dir');
 ```php
 $form->addCheckboxList('checkboxList', NULL, ['myItem'])
 	->setTranslate(FALSE);
+```
+
+## Client-side
+
+Po načtení všech potřebných souborů spustíme inicializace:
+
+```js
+WebChemistry.FormsControls.init();
+```
+
+V případě, že chceme po nette.ajaxu přidělit všem novým inputům pluginy, zavoláme registrační funkci:
+```js
+WebChemistry.FormsControls.registerNetteAjaxEvent();
+```
+
+Pro nastavení jednotlivých komponent slouží funkce addSettings, která se musí volat před init funkcí:
+```js
+WebChemistry.FormsControls.addSettings({
+    date: {
+        enable: false
+    }
+});
+
+WebChemistry.FormsControls.init();
+
+WebChemistry.FormsControls.addSettings(); // Vyhodí v konzoli chybu, protože toto volání je zbytečné
+```
+
+Potřebujeme-li přidat novým inputům pluginy, zavoláme funkci update:
+```js
+WebChemistry.FormsControls.update();
+```
+
+Nové komponenty nebo přepsání stávající? Není problém:
+```js
+WebChemistry.FormsControls.addControl('name', {
+    // Celou základní kostru máte v client/examples/control.sekeleton.js
+    // Příklady nalezneta u již hotových komponent client/components/*.js
+});
+```
+
+## Nastavení pro jednotlivé komponenty
+
+Všechny možná nastavení najdete ve zdrojovém kódu komponenty ve složce client/components/*.js.
+Nastavení potom probíhá velice jednoduše (př. [date input](https://github.com/WebChemistry/forms-controls/blob/master/client/components/date.js#L5) jiny selector):
+jméno komponenty, naleznete na předposledním řádku (první parameter funkce addControl).
+
+```js
+WebChemistry.FormsControls.addSettings({
+    date: {
+        selector: 'input.myNewSelector'
+    }
+});
 ```
