@@ -66,6 +66,7 @@ WebChemistry.FormControlsHelpers = _tmp;
 var _tmp = (function ($, undefined) {
 	if ($ == undefined) {
 		console.error('jQuery missing.');
+		return;
 	}
 
 	var helpers = WebChemistry.FormControlsHelpers;
@@ -118,6 +119,19 @@ var _tmp = (function ($, undefined) {
                 obj.load();
             }
         },
+		registerNetteAjaxEvent: function () {
+        	if (helpers.isUndefined($.nette.ajax)) {
+        		helpers.printError('$.nette.ajax missing.');
+				return;
+			}
+
+			var self = this;
+			$.nette.ext('formControlsAutoEvent', {
+				success: function () {
+					self.update();
+				}
+			});
+		},
 		addControl: function (name, object) {
 		    if (!helpers.isObject(object)) {
 		        this.printError(name + ' must be object.');
