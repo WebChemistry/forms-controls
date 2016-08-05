@@ -12,40 +12,45 @@ class TagsTest extends \PHPUnit_Framework_TestCase {
 		$form = new Form;
 
 		$tags = $form->addTags('tags')
-					 ->setDefaultValue(NULL);
+			->setDefaultValue(NULL);
 
 		$this->assertInstanceOf('WebChemistry\Forms\Controls\Tags', $tags);
 		$this->assertNull($tags->getValue());
 
-		$tags->setDefaultValue(array(
+		$tags->setDefaultValue([
 			0 => 'first',
 			1 => 'second'
-		));
+		]);
 
-		$this->assertSame(array(
+		$this->assertSame([
 			0 => 'first',
 			1 => 'second'
-		), $tags->getValue());
+		], $tags->getValue());
 
 		$tags->setValue('first,    second     ,third');
 
-		$this->assertSame(array(
+		$this->assertSame([
 			0 => 'first',
 			1 => 'second',
 			2 => 'third'
-		), $tags->getValue());
+		], $tags->getValue());
+
+		$tags->setValue('first, second, first');
+		$this->assertSame([
+			'first', 'second'
+		], $tags->getValue());
 	}
 
 	public function testRender() {
 		$form = new Form;
 
 		$tags = $form->addTags('tags')
-					 ->setDefaultValue(NULL);
+			->setDefaultValue(NULL);
 
 		$this->assertStringEqualsFile(__DIR__ . '/expected/tagsNull.dmp', $tags->getControl());
 
 		$tags = $form->addTags('tagsTwo')
-					 ->setDefaultValue(array('tag', 'one', 'two'));
+			->setDefaultValue(['tag', 'one', 'two']);
 
 		$this->assertStringEqualsFile(__DIR__ . '/expected/tagsRender.dmp', $tags->getControl());
 	}

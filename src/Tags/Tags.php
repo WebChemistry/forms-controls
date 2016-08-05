@@ -96,9 +96,11 @@ class Tags extends TextInput {
 			return $value;
 		}
 
-		return array_map(function ($value) {
+		$value = array_map(function ($value) {
 			return trim($value);
 		}, explode(',', $value));
+
+		return array_values(array_unique($value));
 	}
 
 	/**
