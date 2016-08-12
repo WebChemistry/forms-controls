@@ -27,7 +27,7 @@ trait TSuggestion {
 		}
 		if ($component) {
 			if ($component instanceof Suggestion) {
-				$data = $component->call($term);
+				$data = $component->call($term, $this->getParameters());
 			}
 		}
 

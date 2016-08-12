@@ -71,15 +71,16 @@ class Suggestion extends Nette\Forms\Controls\TextInput {
 
 	/**
 	 * @param mixed $q
+	 * @param array $parameters
 	 * @return array
 	 * @throws ControlException
 	 */
-	public function call($q) {
+	public function call($q, array $parameters = []) {
 		if (!is_callable($this->callback)) {
 			throw new ControlException('Suggestion: You must set callable callback.');
 		}
 
-		return call_user_func($this->callback, $q);
+		return call_user_func($this->callback, $q, $parameters);
 	}
 
 	/**
