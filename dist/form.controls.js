@@ -191,7 +191,7 @@ WebChemistry.FormControls = _tmp;
 				}
 
 				var options = helpers.merge({
-					format: target.attr('date-format')
+					format: target.attr('data-format')
 				}, helpers.parseJSON(target.attr('data-settings')), self.options.plugin.options);
 
 				if (self.callCallback(options, target) !== false) {
