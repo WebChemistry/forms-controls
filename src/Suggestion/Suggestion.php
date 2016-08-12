@@ -102,7 +102,7 @@ class Suggestion extends Nette\Forms\Controls\TextInput {
 			$control->data('url', urldecode($url));
 		}
 
-		$control->class[] = 'suggestion-input';
+		$control->appendAttribute('class', 'suggestion-input');
 		$control->data('suggestion', $this->settings);
 
 		return $control;
