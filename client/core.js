@@ -1,4 +1,4 @@
-var _tmp = (function ($, undefined) {
+WebChemistry.FormControls = (function ($, undefined) {
 	if ($ == undefined) {
 		console.error('jQuery missing.');
 		return;
@@ -88,5 +88,3 @@ var _tmp = (function ($, undefined) {
 		}
 	};
 })(jQuery);
-
-WebChemistry.FormControls = _tmp;

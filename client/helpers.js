@@ -1,4 +1,4 @@
-var _tmp = (function ($) {
+WebChemistry.FormControlsHelpers = (function ($) {
 	return {
 		hasMethod: function (obj, method) {
 			return typeof obj[method] === 'function';
@@ -56,5 +56,3 @@ var _tmp = (function ($) {
 		}
 	};
 })(jQuery);
-
-WebChemistry.FormControlsHelpers = _tmp;

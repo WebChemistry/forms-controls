@@ -2,7 +2,7 @@ if (typeof WebChemistry !== 'object') {
 	var WebChemistry = {};
 }
 
-var _tmp = (function ($) {
+WebChemistry.FormControlsHelpers = (function ($) {
 	return {
 		hasMethod: function (obj, method) {
 			return typeof obj[method] === 'function';
@@ -61,9 +61,7 @@ var _tmp = (function ($) {
 	};
 })(jQuery);
 
-WebChemistry.FormControlsHelpers = _tmp;
-
-var _tmp = (function ($, undefined) {
+WebChemistry.FormControls = (function ($, undefined) {
 	if ($ == undefined) {
 		console.error('jQuery missing.');
 		return;
@@ -153,8 +151,6 @@ var _tmp = (function ($, undefined) {
 		}
 	};
 })(jQuery);
-
-WebChemistry.FormControls = _tmp;
 
 (function ($) {
 	var helpers = WebChemistry.FormControlsHelpers;
