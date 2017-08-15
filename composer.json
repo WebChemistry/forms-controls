@@ -14,6 +14,7 @@
 		]
 	},
 	"require": {
+		"php": ">=7.1",
 		"nette/forms": "^3.0"
 	},
 	"minimum-stability": "alpha"
