@@ -1,6 +1,2 @@
-tests/temp/cache
-tests/temp/log
 vendor/
 composer.lock
-node_modules/
-components/
