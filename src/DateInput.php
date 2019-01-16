@@ -31,7 +31,7 @@ final class DateInput extends TextInput {
 		return $this;
 	}
 
-	protected function getHttpData($type, $htmlTail = null) {
+	protected function getHttpData($type, ?string $htmlTail = null) {
 		$str = parent::getHttpData($type, $htmlTail);
 
 		try {
