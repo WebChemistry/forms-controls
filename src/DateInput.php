@@ -14,6 +14,7 @@ final class DateInput extends TextInput {
 
 	private const DATE = 0;
 	private const DATETIME = 1;
+	private const DATEMONTH = 2;
 
 	/** @var int */
 	private $type = self::DATE;
@@ -31,11 +32,22 @@ final class DateInput extends TextInput {
 		return $this;
 	}
 
+	public function setDateMonth() {
+		$this->setHtmlType('month');
+		$this->type = self::DATEMONTH;
+
+		return $this;
+	}
+
 	protected function getHttpData($type, ?string $htmlTail = null) {
 		$str = parent::getHttpData($type, $htmlTail);
 
+
 		try {
-			$date = new \DateTime($str);
+			$date = null;
+			if ($str) {
+				$date = new \DateTime($str);
+			}
 		} catch (\Throwable $e) {
 			$msg = Validator::$messages[self::DATE_VALID] ?? 'Date is not correct.';
 
@@ -52,15 +64,24 @@ final class DateInput extends TextInput {
 			return null;
 		}
 
-		return $this->type === self::DATETIME ? $this->value->format('Y-m-d\TH:i') : $this->value->format('Y-m-d');
+		switch ($this->type) {
+			case self::DATETIME:
+				return $this->value->format('Y-m-d\TH:i');
+			case self::DATE:
+				return $this->value->format('Y-m-d');
+			default:
+				return $this->value->format('Y-m');
+		}
 	}
 
 	public function getControl(): Nette\Utils\Html {
 		$control = parent::getControl();
 		if ($this->type === self::DATE) {
-			$control->appendAttribute('class', 'date-input');
+			$control->appendAttribute('class', 'date-input date-control');
+		} else if ($this->type === self::DATETIME) {
+			$control->appendAttribute('class', 'datetime-input date-control');
 		} else {
-			$control->appendAttribute('class', 'datetime-input');
+			$control->appendAttribute('class', 'datemonth-input date-control');
 		}
 
 		return $control;
