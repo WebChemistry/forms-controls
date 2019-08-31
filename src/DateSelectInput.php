@@ -8,7 +8,7 @@ use Nette\Application\UI\Form;
 use Nette\Forms\Controls\BaseControl;
 use Nette\Forms\Helpers;
 use Nette\Forms\IControl;
-use WebChemistry\Utils\DateTime;
+use Nette\Utils\DateTime;
 
 final class DateSelectInput extends BaseControl {
 
