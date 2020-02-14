@@ -1,9 +1,8 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace WebChemistry\Controls;
 
+use DateTime;
 use Nette;
 use Nette\Forms\Controls\TextInput;
 use Nette\Forms\Validator;
@@ -12,9 +11,18 @@ final class DateInput extends TextInput {
 
 	const DATE_VALID = 'wchDate';
 
-	private const DATE = 0;
-	private const DATETIME = 1;
-	private const DATEMONTH = 2;
+	/** @var string[] */
+	public static $dateFormats = [
+		self::DATE => 'Y-m-d',
+		self::DATETIME => 'Y-m-d\TH:i',
+		self::MONTH => 'Y-m',
+		self::WEEK => 'Y-\WW',
+	];
+
+	public const DATE = 0;
+	public const DATETIME = 1;
+	public const MONTH = 2;
+	public const WEEK = 3;
 
 	/** @var int */
 	private $type = self::DATE;
@@ -32,9 +40,16 @@ final class DateInput extends TextInput {
 		return $this;
 	}
 
-	public function setDateMonth() {
+	public function setMonth() {
 		$this->setHtmlType('month');
-		$this->type = self::DATEMONTH;
+		$this->type = self::MONTH;
+
+		return $this;
+	}
+
+	public function setWeek() {
+		$this->setHtmlType('week');
+		$this->type = self::WEEK;
 
 		return $this;
 	}
@@ -64,38 +79,33 @@ final class DateInput extends TextInput {
 			return null;
 		}
 
-		switch ($this->type) {
-			case self::DATETIME:
-				return $this->value->format('Y-m-d\TH:i');
-			case self::DATE:
-				return $this->value->format('Y-m-d');
-			default:
-				return $this->value->format('Y-m');
-		}
+
+		return $this->value->format(self::$dateFormats[$this->type]);
 	}
 
 	public function getControl(): Nette\Utils\Html {
 		$control = parent::getControl();
-		if ($this->type === self::DATE) {
-			$control->appendAttribute('class', 'date-input date-control');
-		} else if ($this->type === self::DATETIME) {
-			$control->appendAttribute('class', 'datetime-input date-control');
-		} else {
-			$control->appendAttribute('class', 'datemonth-input date-control');
-		}
+		$control->appendAttribute('class', 'js-date-control');
+
+		$control->setAttribute('data-format', self::$dateFormats[$this->type]);
 
 		return $control;
 	}
 
+	/**
+	 * @param DateTime|null $value
+	 */
 	public function setValue($value) {
-		if ($value !== null && !$value instanceof \DateTime) {
+		if ($value !== null && !$value instanceof DateTime) {
 			throw new \LogicException("Must be a DateTime or null.");
 		}
 
 		$this->value = $value;
+
+		return $this;
 	}
 
-	public function getValue() {
+	public function getValue(): ?DateTime {
 		return $this->value;
 	}
 
