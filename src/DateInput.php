@@ -6,6 +6,7 @@ use DateTime;
 use Nette;
 use Nette\Forms\Controls\TextInput;
 use Nette\Forms\Validator;
+use Throwable;
 
 final class DateInput extends TextInput {
 
@@ -93,11 +94,21 @@ final class DateInput extends TextInput {
 	}
 
 	/**
-	 * @param DateTime|null $value
+	 * @param DateTime|string|null $value
 	 */
 	public function setValue($value) {
-		if ($value !== null && !$value instanceof DateTime) {
-			throw new \LogicException("Must be a DateTime or null.");
+		if (is_string($value)) {
+			try {
+				$value = new DateTime($value);
+			} catch (Throwable $exception) {
+				throw new \LogicException(
+					sprintf('Cannot create datetime from string, %s given.', $value),
+					0,
+					$exception
+				);
+			}
+		} else if ($value !== null && !$value instanceof DateTime) {
+			throw new \LogicException("Must be a string or DateTime or null.");
 		}
 
 		$this->value = $value;
