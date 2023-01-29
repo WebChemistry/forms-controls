@@ -8,8 +8,8 @@ trait TForm {
 		return $this[$name] = new DateInput($label, $maxLength);
 	}
 
-	public function addSuggestion(string $name, ?string $label = null, callable $callback): SuggestionInput {
-		return $this[$name] = new SuggestionInput($label, null, $callback);
+	public function addSuggestion(string $name, callable $callback, ?string $label = null): SuggestionInput {
+		return $this[$name] = new SuggestionInput($callback, $label, null);
 	}
 
 	public function addDateSelect(string $name, ?string $label): DateSelectInput {

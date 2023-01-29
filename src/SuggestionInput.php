@@ -10,7 +10,7 @@ final class SuggestionInput extends TextInput {
 	/** @var callable */
 	private $callback;
 
-	public function __construct($label = null, $maxLength = null, callable $callback) {
+	public function __construct(callable $callback, $label = null, $maxLength = null) {
 		parent::__construct($label, $maxLength);
 		$this->callback = $callback;
 
