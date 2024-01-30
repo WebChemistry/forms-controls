@@ -3,6 +3,9 @@
 namespace WebChemistry\Controls;
 
 use DateTime;
+use DateTimeImmutable;
+use DateTimeInterface;
+use LogicException;
 use Nette;
 use Nette\Forms\Controls\TextInput;
 use Nette\Forms\Validator;
@@ -28,10 +31,18 @@ final class DateInput extends TextInput {
 	/** @var int */
 	private $type = self::DATE;
 
+	private $immutable = false;
+
 	public function __construct($label = null, int $maxLength = null) {
 		parent::__construct($label, $maxLength);
 
 		$this->setHtmlType('date');
+	}
+
+	public function setImmutable($immutable = true) {
+		$this->immutable = $immutable;
+
+		return $this;
 	}
 
 	public function setDateTime() {
@@ -62,9 +73,13 @@ final class DateInput extends TextInput {
 		try {
 			$date = null;
 			if ($str) {
-				$date = new \DateTime($str);
+				if (!$this->immutable) {
+					$date = new DateTime($str);
+				} else {
+					$date = new DateTimeImmutable($str);
+				}
 			}
-		} catch (\Throwable $e) {
+		} catch (Throwable $e) {
 			$msg = Validator::$messages[self::DATE_VALID] ?? 'Date is not correct.';
 
 			$this->addError($msg);
@@ -99,16 +114,20 @@ final class DateInput extends TextInput {
 	public function setValue($value) {
 		if (is_string($value)) {
 			try {
-				$value = new DateTime($value);
+				if (!$this->immutable) {
+					$value = new DateTime($value);
+				} else {
+					$value = new DateTimeImmutable($value);
+				}
 			} catch (Throwable $exception) {
-				throw new \LogicException(
+				throw new LogicException(
 					sprintf('Cannot create datetime from string, %s given.', $value),
 					0,
 					$exception
 				);
 			}
-		} else if ($value !== null && !$value instanceof DateTime) {
-			throw new \LogicException("Must be a string or DateTime or null.");
+		} else if ($value !== null && !$value instanceof DateTimeInterface) {
+			throw new LogicException("Must be a string or DateTime or DateTimeImmutable or null.");
 		}
 
 		$this->value = $value;
@@ -116,7 +135,10 @@ final class DateInput extends TextInput {
 		return $this;
 	}
 
-	public function getValue(): ?DateTime {
+	/**
+	 * @return DateTime|DateTimeImmutable|null
+	 */
+	public function getValue() {
 		return $this->value;
 	}
 
